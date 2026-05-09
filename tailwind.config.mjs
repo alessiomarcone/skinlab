@@ -8,6 +8,7 @@ export default {
       },
       colors: {
         brand: '#FF6B9D',
+        'brand-hover': '#e85a8a',
         'brand-light': '#FFE4F0',
         dark: '#0D0D0D',
       },

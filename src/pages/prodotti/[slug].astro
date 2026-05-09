@@ -16,7 +16,11 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params as { slug: string }
-const product = await sanityClient.fetch<ProductDetail>(PRODUCT_BY_SLUG_QUERY, { slug })
+const product = await sanityClient.fetch<ProductDetail | null>(PRODUCT_BY_SLUG_QUERY, { slug })
+
+if (!product) {
+  throw new Error(`Prodotto non trovato: ${slug}`)
+}
 
 const imageUrl = buildImageUrl(product.imageUrl, { w: 1200, q: 85 })
 ---
@@ -63,7 +67,7 @@ const imageUrl = buildImageUrl(product.imageUrl, { w: 1200, q: 85 })
       href={product.stripePaymentLink}
       target="_blank"
       rel="noopener noreferrer"
-      class="block w-full text-center bg-brand text-white font-bold py-4 px-8 hover:bg-[#e85a8a] transition-colors tracking-wide"
+      class="block w-full text-center bg-brand text-white font-bold py-4 px-8 hover:bg-brand-hover transition-colors tracking-wide"
     >
       ACQUISTA →
     </a>

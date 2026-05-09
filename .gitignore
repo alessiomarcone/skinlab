@@ -1,4 +1,10 @@
 dist/
 .env
+.env.*
+.env.*.local
 node_modules/
 .superpowers/
+.astro/
+.DS_Store
+*.log
+npm-debug.log*

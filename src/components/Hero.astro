@@ -1,0 +1,42 @@
+---
+import type { ProductSummary } from '../lib/sanity'
+import { buildImageUrl } from '../lib/sanity'
+
+interface Props {
+  heroProduct: ProductSummary
+}
+
+const { heroProduct } = Astro.props
+const imageUrl = buildImageUrl(heroProduct.imageUrl, { w: 900, q: 85 })
+---
+<section class="bg-brand-light">
+  <div class="max-w-5xl mx-auto px-6 py-14 md:py-24 flex flex-col md:flex-row items-center gap-10">
+    <div class="flex-1 order-2 md:order-1 text-center md:text-left">
+      <p class="text-xs uppercase tracking-widest text-brand mb-3 font-semibold">
+        Skincare onesta
+      </p>
+      <h1 class="text-4xl md:text-6xl font-black text-dark leading-tight tracking-tight">
+        La skincare<br />senza bugie.
+      </h1>
+      <p class="text-gray-600 mt-4 text-lg">We believe in your skin. Literally.</p>
+      <a
+        href="#prodotti"
+        class="inline-block mt-8 bg-brand text-white font-bold px-8 py-3 hover:bg-[#e85a8a] transition-colors tracking-wide"
+      >
+        SCOPRI I PRODOTTI →
+      </a>
+    </div>
+    <div class="flex-1 order-1 md:order-2 w-full max-w-xs md:max-w-sm mx-auto">
+      <img
+        src={imageUrl}
+        alt={heroProduct.name}
+        width={900}
+        height={1125}
+        loading="eager"
+        fetchpriority="high"
+        decoding="sync"
+        class="w-full object-cover"
+      />
+    </div>
+  </div>
+</section>

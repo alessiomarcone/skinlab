@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import {
+  sanityClient,
+  PRODUCTS_QUERY,
+  PRODUCT_BY_SLUG_QUERY,
+  buildImageUrl,
+} from '../../lib/sanity'
+import type { ProductSummary, ProductDetail } from '../../lib/sanity'
+
+export async function getStaticPaths() {
+  const products = await sanityClient.fetch<ProductSummary[]>(PRODUCTS_QUERY)
+  return products.map(p => ({
+    params: { slug: p.slug.current },
+  }))
+}
+
+const { slug } = Astro.params as { slug: string }
+const product = await sanityClient.fetch<ProductDetail>(PRODUCT_BY_SLUG_QUERY, { slug })
+
+const imageUrl = buildImageUrl(product.imageUrl, { w: 1200, q: 85 })
+---
+<BaseLayout title={product.name} description={product.tagline}>
+  <div class="max-w-2xl mx-auto px-6 py-12">
+
+    <a
+      href="/"
+      class="text-sm text-gray-400 hover:text-brand transition-colors mb-8 inline-block"
+    >
+      ← Tutti i prodotti
+    </a>
+
+    <img
+      src={imageUrl}
+      alt={product.name}
+      width={1200}
+      height={1500}
+      loading="eager"
+      fetchpriority="high"
+      decoding="sync"
+      class="w-full object-cover mb-8"
+    />
+
+    <p class="text-xs uppercase tracking-widest text-gray-400 mb-2">{product.category}</p>
+    <h1 class="text-3xl md:text-4xl font-black text-dark leading-tight mb-2">
+      {product.name}
+    </h1>
+    <p class="text-lg text-gray-500 italic mb-4">{product.tagline}</p>
+    <p class="text-2xl text-brand font-bold mb-6">€{product.price.toFixed(2)}</p>
+
+    <p class="text-gray-700 leading-relaxed mb-6 whitespace-pre-line">
+      {product.description}
+    </p>
+
+    {product.ingredients && (
+      <p class="text-sm text-gray-400 mb-8 border-t border-gray-100 pt-4">
+        <span class="font-semibold text-gray-500">Ingredienti attivi:</span>{' '}
+        {product.ingredients}
+      </p>
+    )}
+
+    <a
+      href={product.stripePaymentLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="block w-full text-center bg-brand text-white font-bold py-4 px-8 hover:bg-[#e85a8a] transition-colors tracking-wide"
+    >
+      ACQUISTA →
+    </a>
+
+  </div>
+</BaseLayout>

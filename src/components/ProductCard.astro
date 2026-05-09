@@ -1,0 +1,31 @@
+---
+import type { ProductSummary } from '../lib/sanity'
+import { buildImageUrl } from '../lib/sanity'
+
+interface Props {
+  product: ProductSummary
+  eager?: boolean
+}
+
+const { product, eager = false } = Astro.props
+const imageUrl = buildImageUrl(product.imageUrl, { w: 600, q: 85 })
+---
+<a href={`/prodotti/${product.slug.current}`} class="group block">
+  <div class="aspect-[3/4] overflow-hidden bg-brand-light">
+    <img
+      src={imageUrl}
+      alt={product.name}
+      width={600}
+      height={800}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+    />
+  </div>
+  <div class="pt-3">
+    <p class="text-xs uppercase tracking-widest text-gray-400">{product.category}</p>
+    <h3 class="font-bold text-dark mt-1 leading-tight">{product.name}</h3>
+    <p class="text-sm text-gray-500 mt-1 leading-snug line-clamp-2">{product.tagline}</p>
+    <p class="text-brand font-semibold mt-2">€{product.price.toFixed(2)}</p>
+  </div>
+</a>

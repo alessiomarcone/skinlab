@@ -47,7 +47,7 @@ skinlab/
 ├── public/
 │   └── fonts/
 │       └── inter-variable.woff2
-├── sanity/
+├── sanity/                      ← Studio embedded (dev only, localhost:3333)
 │   └── schemaTypes/
 │       └── product.ts
 └── netlify.toml
@@ -132,7 +132,7 @@ Immagini servite via CDN Sanity con parametri `?w=800&fm=webp&q=85`.
 **Hero — split 50/50 desktop, stack mobile:**
 
 - Sinistra: `<h1>` headline, tagline, CTA "Scopri i prodotti" (anchor `#prodotti`)
-- Destra: immagine prodotto hero (primo bestseller da Sanity), `loading="eager"`, `fetchpriority="high"`, dimensioni esplicite
+- Destra: immagine prodotto hero (primo prodotto con `isBestseller: true`; fallback: primo prodotto in lista), `loading="eager"`, `fetchpriority="high"`, dimensioni esplicite
 
 **ProductGrid:**
 

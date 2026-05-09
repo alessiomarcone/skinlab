@@ -1,6 +1,19 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/Hero.astro'
+import ProductGrid from '../components/ProductGrid.astro'
+import { sanityClient, PRODUCTS_QUERY } from '../lib/sanity'
+import type { ProductSummary } from '../lib/sanity'
+
+const products = await sanityClient.fetch<ProductSummary[]>(PRODUCTS_QUERY)
+
+if (!products.length) {
+  throw new Error('Nessun prodotto trovato in Sanity. Aggiungi almeno un prodotto prima di buildare.')
+}
+
+const heroProduct = products.find(p => p.isBestseller) ?? products[0]
 ---
-<BaseLayout title="Home">
-  <p>In costruzione</p>
+<BaseLayout title="Home" description="Skincare onesta. We believe in your skin. Literally.">
+  <Hero heroProduct={heroProduct} />
+  <ProductGrid products={products} />
 </BaseLayout>
